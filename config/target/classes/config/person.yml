@@ -3,3 +3,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  datasource:
+    username: root
+    password: root1234
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
