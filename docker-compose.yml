@@ -1,0 +1,97 @@
+version: '3'
+services:
+  mysql:
+    restart: always
+    image: mysql
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+      --max_allowed_packet=128M
+      --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  discovery:
+    image: discovery:1.0-SNAPSHOT
+    hostname: discovery
+    name: discovery
+    ports:
+     - "8761:8761"
+
+  config:
+    image: config:1.0-SNAPSHOT
+    hostname: config
+    name: config
+    links:
+      - discovery
+    environment:
+       EUREKA_HOST: discovery
+       EUREKA_PORT: 8761
+  #  ports:
+  #    - "8888:8888"
+
+  person:
+    image: person:1.0-SNAPSHOT
+    hostname: person
+    links:
+      - discovery
+      - config
+      - mysql
+    environment:
+       EUREKA_HOST: discovery
+       EUREKA_PORT: 8761
+       SPRING_PROFILES_ACTIVE: docker
+  #  ports:
+  #    - "8082:8082"
+
+  some:
+    image: some:1.0-SNAPSHOT
+    hostname: some
+    links:
+      - discovery
+      - config
+    environment:
+       EUREKA_HOST: discovery
+       EUREKA_PORT: 8761
+       SPRING_PROFILES_ACTIVE: docker
+  #  ports:
+  #    - "8083:8083"
+
+  ui:
+    image: ui:1.0-SNAPSHOT
+    hostname: ui
+    links:
+      - discovery
+      - config
+      - person
+      - some
+    environment:
+       EUREKA_HOST: discovery
+       EUREKA_PORT: 8761
+       SPRING_PROFILES_ACTIVE: docker
+  #  ports:
+  #    - "8080:8080"
+
+  monitor:
+    image: monitor:1.0-SNAPSHOT
+    hostname: monitor
+    links:
+      - discovery
+      - config
+      - person
+      - some
+      - ui
+    environment:
+       EUREKA_HOST: discovery
+       EUREKA_PORT: 8761
+       SPRING_PROFILES_ACTIVE: docker
+  #  ports:
+  #    - "8989:8989"
