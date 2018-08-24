@@ -15,7 +15,18 @@
                     </div>
                 </div>
             </div>
-        
+
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="msg" ng-model="msg" placeholder="输入内容">
+                </div>
+                <div class="col-xs-12">
+                    <button type="button" class="btn btn-default" ng-click="setSome(msg)">设置</button>
+                    <div>
+                        <label>{{retStr}}</label>
+                    </div>
+                </div>
+            </div>
             <div class="col-xs-12">
             	<button type="button" class="btn btn-default" ng-click="getSome()">获取</button>
             	<div>

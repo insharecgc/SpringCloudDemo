@@ -19,8 +19,8 @@ uiApp.config(function ($stateProvider, $urlRouterProvider) {
 
 uiApp.controller("PersonController", function ($scope, $http) {
 
-        $scope.people = "";
-        $scope.errorMessage = "";
+    $scope.people = "";
+    $scope.errorMessage = "";
 
     $scope.getMessageResponse = function(personName) {
     	$http.post('/save', personName).success(function(data){
@@ -38,12 +38,21 @@ uiApp.controller("SomeController", function ($scope, $http) {
 	$scope.str = "";
     $scope.errorMessage = "";
 
-$scope.getSome = function(){
-	$http.get('/getsome').success(function(data){
-        $scope.str = data;
-        $scope.errorMessage = "";
-    }).error(function() {
-        $scope.errorMessage = "错误";
-    });
-}
+    $scope.getSome = function(){
+        $http.get('/getsome').success(function(data){
+            $scope.str = data;
+            $scope.errorMessage = "";
+        }).error(function() {
+            $scope.errorMessage = "错误";
+        });
+    }
+
+    $scope.setSome = function(msg) {
+        	$http.post('/setsome', msg).success(function(data){
+                $scope.retStr = data;
+                $scope.errorMessage = "";
+            }).error(function() {
+                $scope.errorMessage = "错误";
+            });
+        }
 });
